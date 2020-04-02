@@ -60,8 +60,12 @@ class AnagramInternal:
 
         return " ".join(sentence)
 
+    # Print json database
+    def dump(self):
+        sys.stdout.write(json.dumps(self.database))
+
     # Scan inputs to database
-    def generator(self):
+    def load_generator(self):
         while True:
             # Scan word
             word = slugify(sys.stdin.readline())
@@ -76,10 +80,6 @@ class AnagramInternal:
 
             # Add Word
             add(self.database, word_tree(word), word)
-
-    # Print json database
-    def dump(self):
-        sys.stdout.write(json.dumps(generator))
 
     def load_database(self):
         sys.stdout.write("[!] loading...\n")

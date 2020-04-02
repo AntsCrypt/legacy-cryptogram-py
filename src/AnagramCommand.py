@@ -11,3 +11,7 @@ class AnagramCommand(AnagramInternal):
 
     def similar(self, text):
         print("[!] Similar words:", ", ".join(self.similar_words(text)))
+
+    def generator(self):
+        self.load_generator()
+        self.dump()

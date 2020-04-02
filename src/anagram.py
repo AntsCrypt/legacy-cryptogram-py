@@ -18,6 +18,10 @@ if __name__ == '__main__':
             command.load_database()
             command.similar(command.args["text"])
 
+        elif command.args["cmd"] == "generator":
+            command.generator()
+
+
     except (IndexError, KeyError):
         sys.stdout.write("[!] ERROR! use: anagram [encode/decode] [hash] [text]")
 
