@@ -1,11 +1,12 @@
 # Sources
-palavras.txt
-output.json
+src/palavras.txt
+src/database.json
 
 # Files
 __pycache__
 
 # All
 ._.DS_Store
+.DS_Store
 *.log
 run
