@@ -2,6 +2,10 @@
 palavras.txt
 output.json
 
+# Files
+__pycache__
+
 # All
 ._.DS_Store
 *.log
+run
