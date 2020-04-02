@@ -3,9 +3,9 @@ patch_project=`pwd`;
 patch_install=$1;
 
 echo "#!/bin/bash
-python3 $patch_project/anagram.py -d $patch_projec/output.json \$@"  >> "$patch_project/run"
+python3 $patch_project/src/anagram.py -d $patch_projec/src/tmp/database.json \$@"  >> "$patch_project/run"
 
+`chmod 755 ./run`
 `ln -s $patch_project/run $patch_install/anagram`
 
 echo "[!] installation was a success!"
-

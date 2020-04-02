@@ -1,6 +1,6 @@
 # Sources
-palavras.txt
-output.json
+src/palavras.txt
+src/database.json
 
 # Files
 __pycache__
