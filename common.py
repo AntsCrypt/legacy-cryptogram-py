@@ -54,11 +54,20 @@ def scan_text(ignore):
 
 # get word same letters
 def similar_words(database, word):
-    enter = database
-    for go in word_tree(word):
-        enter = enter[go]
+    # search words
+    try:
+        enter = database
+        for go in word_tree(word):
+            enter = enter[go]
+    # word not exist in database
+    except KeyError:
+        return [word]
+    
+    # similar words exist in database
+    else:
+        return enter
 
-    return enter
+    
 
 
 def randomize_setence(database, text):
