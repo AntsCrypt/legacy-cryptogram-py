@@ -4,12 +4,12 @@ import sys
 class AnagramCommand(AnagramInternal):
     def encode(self, text):
         self.load_database()
-        text = self.similar_setence(text)
+        text = self.similar_sentence(text)
         sys.stdout.write("[!] Encoded text: {}".format(text))
 
     def decode(self, text):
         self.load_database()
-        text = self.similar_setence(text, inverse = -1)
+        text = self.similar_sentence(text, inverse = True)
         sys.stdout.write("[!] Decoded text: {}".format(text))
 
     def similar(self, text):

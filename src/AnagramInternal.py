@@ -51,15 +51,16 @@ class AnagramInternal:
         else:
             return enter
 
-    # get anagram setence
-    def similar_setence(self, text, inverse = False):
+    # get anagram sentence
+    def similar_sentence(self, text, inverse = False):
         # separe text
-        sentence = text.split(" ")
+        sentence = self.randomize_sentence(text.split(" "), inverse = inverse)
 
+        # anagram words
         for index in range(len(sentence)):            
             sentence[index] = self.randomize_word(sentence[index], inverse = inverse)
 
-
+        # anagram sentence
         return " ".join(sentence)
 
     def randomize_word(self, word, inverse = False):
@@ -67,9 +68,11 @@ class AnagramInternal:
         words = self.similar_words(word)
         len_words = len(words)
 
+        # search word
         try:
             pos = words.index(word)
 
+        # word not found
         except ValueError:
             return word
 
@@ -89,7 +92,9 @@ class AnagramInternal:
             pos += rand
 
         return words[pos]
-            
+
+    def randomize_sentence(self, array_text, inverse = False):
+        return array_text
 
     # Print json database
     def dump(self):
