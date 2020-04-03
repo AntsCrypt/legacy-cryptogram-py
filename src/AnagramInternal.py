@@ -52,13 +52,44 @@ class AnagramInternal:
             return enter
 
     # get anagram setence
-    def similar_setence(self, text):
+    def similar_setence(self, text, inverse = False):
+        # separe text
         sentence = text.split(" ")
-        for index in range(len(sentence)):
-            words = self.similar_words(sentence[index])
-            sentence[index] = random.choice(words)
+
+        for index in range(len(sentence)):            
+            sentence[index] = self.randomize_word(sentence[index], inverse = inverse)
+
 
         return " ".join(sentence)
+
+    def randomize_word(self, word, inverse = False):
+        # other words
+        words = self.similar_words(word)
+        len_words = len(words)
+
+        try:
+            pos = words.index(word)
+
+        except ValueError:
+            return word
+
+        # random word
+        rand = random.randrange(0, len_words)
+
+        # decode
+        if inverse:
+            pos -= rand
+
+        # encode
+        elif (pos + rand) >= len_words:
+            pos += rand - len_words
+        
+        # encode
+        else:
+            pos += rand
+
+        return words[pos]
+            
 
     # Print json database
     def dump(self):
