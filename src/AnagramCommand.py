@@ -14,7 +14,14 @@ class AnagramCommand(AnagramInternal):
 
     def similar(self, text):
         self.load_database()
-        self.print("[!] Similar words:", self.similar_words(text))
+
+        # Similar sentences
+        if " " in text:
+            self.print("[!] Similar sentences:", self.similar_sentences(text))
+
+        # Similar words
+        else:
+            self.print("[!] Similar words:", self.similar_words(text))
 
     def generator(self):
         self.print("[?] Write words:")

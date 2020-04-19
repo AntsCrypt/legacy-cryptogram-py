@@ -1,6 +1,6 @@
 from slugify import slugify
 from functions import *
-import random, json, sys, re
+import itertools, random, json, sys, re
 
 class AnagramInternal:
     database = tree()
@@ -38,7 +38,7 @@ class AnagramInternal:
         #set random control
         self.random_reset()
 
-    # get word same letters
+    # get all similar words same letters
     def similar_words(self, word):
         # search words
         try:
@@ -52,6 +52,23 @@ class AnagramInternal:
         # similar words exist in database
         else:
             return enter
+
+    # get all similar sentences
+    def similar_sentences(self, text):
+        sentence = text.split(" ")
+        len_sentence = len(sentence)
+        sentences = []
+
+        # create all possibilities
+        for index in range(len_sentence):
+            sentence[index] = self.similar_words(sentence[index])
+
+        # mount anagrams
+        for possible_sentences in list(itertools.permutations(sentence)):
+            for possibles_words in list(itertools.product(*possible_sentences)):
+                sys.stdout.write(" ".join(possibles_words) + "\n")
+
+        return ""
 
     # get anagram sentence
     def similar_sentence(self, text, inverse = False):
@@ -169,7 +186,7 @@ class AnagramInternal:
 
     # Print with optional strings verify
     def print(self, optional, text_array = ""):
-        
+
         # concatenate text with breakline
         if isinstance(text_array, list):
             text_string = "\n".join(text_array)
@@ -179,7 +196,7 @@ class AnagramInternal:
             text_string = text_array
 
         # verify show
-        show_optional = len(self.args["params"]["log"])
+        show_optional = len(self.args["params"]["log"]) and len(optional)
         show_string = len(text_string)
 
         # show logs
@@ -188,7 +205,7 @@ class AnagramInternal:
 
         # prints space
         if show_optional and show_string:
-            sys.stdout.write(" ")
+            sys.stdout.write("\n")
 
         # show output
         if show_string:
@@ -197,6 +214,3 @@ class AnagramInternal:
         # prints EOS
         if show_optional:
             sys.stdout.write("\n")
-    
-
-    
