@@ -9,6 +9,8 @@ class AnagramInternal:
         "text": "",
         "params": {
             "database": "database.json",
+            "limit": "0",
+            "jumps": "1",
             "hash": "2345678",
             "log": ""
         }
@@ -35,8 +37,13 @@ class AnagramInternal:
 
             index += 1
 
-        #set random control
+        # set random control
         self.random_reset()
+
+        # parse params
+        self.args["params"]["limit"] = int(self.args["params"]["limit"])
+        self.args["params"]["jumps"] = int(self.args["params"]["jumps"])
+        self.args["params"]["log"] = int(len(self.args["params"]["log"]) > 0)
 
     # get all similar words same letters
     def similar_words(self, word):
@@ -59,13 +66,35 @@ class AnagramInternal:
         len_sentence = len(sentence)
         sentences = []
 
+        # get configs
+        jumps = self.args["params"]["jumps"]
+        limit = self.args["params"]["limit"]
+
         # create all possibilities
         for index in range(len_sentence):
             sentence[index] = self.similar_words(sentence[index])
 
+        index = 0
+        count = 0
+
         # mount anagrams
         for possible_sentences in list(itertools.permutations(sentence)):
             for possibles_words in list(itertools.product(*possible_sentences)):
+
+                # increment count
+                index += 1
+
+                # jump numbers
+                if index % jumps and jumps:
+                    continue
+
+                # break final
+                if count > limit and limit:
+                    return ""
+
+                count += 1
+
+                # print output
                 sys.stdout.write(" ".join(possibles_words) + "\n")
 
         return ""
@@ -159,8 +188,7 @@ class AnagramInternal:
 
     # Print json database
     def dump(self):
-        human = len(self.args["params"]["log"]) > 0
-        return json.dumps(self.database, indent=human)
+        return json.dumps(self.database, self.args["params"]["log"])
 
     # Scan inputs to database
     def load_generator(self):
@@ -196,7 +224,7 @@ class AnagramInternal:
             text_string = text_array
 
         # verify show
-        show_optional = len(self.args["params"]["log"]) and len(optional)
+        show_optional = len(optional) and self.args["params"]["log"]
         show_string = len(text_string)
 
         # show logs

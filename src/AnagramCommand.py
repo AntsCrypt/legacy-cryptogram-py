@@ -1,6 +1,19 @@
 from AnagramInternal import AnagramInternal
 import sys
 
+help_str = """[!] params:
+\t-log
+\t-hash [password]
+\t-jumps [pass]
+\t-limit [max]
+\t-database [file]
+[!] commands:
+\tencode [text]
+\tdecode [text]
+\tsimilar [word]
+\tgenerator
+\n"""
+
 class AnagramCommand(AnagramInternal):
     def encode(self, text):
         self.load_database()
@@ -31,17 +44,7 @@ class AnagramCommand(AnagramInternal):
         
 
     def help(self):
-        self.print("{}\n\t{}\t{}\n\t{}\n\n{}\n\t{}\n\t{}\n\t{}\n\t{}".format(
-            "[!] params:",
-            "-log"
-            "-hash [number]",
-            "-database [file]",
-            "[!] commands:",
-            "encode [text]",
-            "decode [text]",
-            "similar [word]",
-            "generator"
-        ))
+        sys.stderr.write(help_str)
 
 
 
