@@ -5,11 +5,12 @@ import random, json, sys, re
 class AnagramInternal:
     database = tree()
     args = {
-        "cmd":"",
-        "text":"",
+        "cmd": "",
+        "text": "",
         "params": {
-            "database":"database.json",
-            "hash": "2345678"
+            "database": "database.json",
+            "hash": "2345678",
+            "log": ""
         }
     }
 
@@ -20,7 +21,8 @@ class AnagramInternal:
             # Load params
             if sys.argv[index][0] == "-":
                 self.args["params"][sys.argv[index][1:]] = sys.argv[index + 1]
-                index += 1
+                if sys.argv[index][1:] != "log":
+                    index += 1
             
             # Load command
             elif self.args["cmd"] == "" and not sys.argv[index].count("anagram"):
@@ -34,7 +36,7 @@ class AnagramInternal:
             index += 1
 
         #set random control
-        random.seed(self.args["params"]["hash"])
+        self.random_reset()
 
     # get word same letters
     def similar_words(self, word):
@@ -54,13 +56,21 @@ class AnagramInternal:
     # get anagram sentence
     def similar_sentence(self, text, inverse = False):
         # separe text
-        sentence = self.randomize_sentence(text.split(" "), inverse = inverse)
+        sentence = text.split(" ")
+        
+        # setence decode
+        if not inverse:
+            sentence = self.randomize_sentence(sentence, inverse = False)
 
         # anagram words
+        self.random_reset()
         for index in range(len(sentence)):            
             sentence[index] = self.randomize_word(sentence[index], inverse = inverse)
 
-        # anagram sentence
+        # sentence encode
+        if inverse:
+            sentence = self.randomize_sentence(sentence, inverse = True)
+
         return " ".join(sentence)
 
     def randomize_word(self, word, inverse = False):
@@ -94,11 +104,46 @@ class AnagramInternal:
         return words[pos]
 
     def randomize_sentence(self, array_text, inverse = False):
-        return array_text
+        # reboot random
+        self.random_reset()
+
+        len_sentence = len(array_text)
+        randons = self.random_array(len_sentence)
+        sentence = []
+
+        # Suffle setence
+        for index in randons:
+            sentence.append(array_text[index])
+
+        if not inverse:
+            return sentence
+
+        # Resuffle sentence
+        for index in range(len_sentence):
+            sentence[randons[index]] = array_text[index]
+
+        return sentence
+
+    # Generate array with random numbers
+    def random_array(self, size):
+        arr = []
+        for index in range(size):
+            while True:
+                rand = random.randrange(0, size)
+                if not rand in arr:
+                    arr.append(rand)
+                    break
+        return arr
+
+    
+    # Reload Hash token
+    def random_reset(self):
+        random.seed(self.args["params"]["hash"])
 
     # Print json database
     def dump(self):
-        sys.stdout.write(json.dumps(self.database))
+        human = len(self.args["params"]["log"]) > 0
+        return json.dumps(self.database, indent=human)
 
     # Scan inputs to database
     def load_generator(self):
@@ -118,10 +163,40 @@ class AnagramInternal:
             add(self.database, word_tree(word), word)
 
     def load_database(self):
-        sys.stdout.write("[!] loading...\n")
+        self.print("[!] loading...\n")
         with open(self.args["params"]["database"], 'rb') as json_data:
             self.database = json.loads(json_data.read())
 
+    # Print with optional strings verify
+    def print(self, optional, text_array = ""):
+        
+        # concatenate text with breakline
+        if isinstance(text_array, list):
+            text_string = "\n".join(text_array)
+        
+        # normal text
+        else:
+            text_string = text_array
+
+        # verify show
+        show_optional = len(self.args["params"]["log"])
+        show_string = len(text_string)
+
+        # show logs
+        if show_optional:
+            sys.stdout.write(optional)
+
+        # prints space
+        if show_optional and show_string:
+            sys.stdout.write(" ")
+
+        # show output
+        if show_string:
+           sys.stdout.write(text_string) 
+
+        # prints EOS
+        if show_optional:
+            sys.stdout.write("\n")
     
 
     
