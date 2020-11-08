@@ -30,7 +30,8 @@ class AnagramCommand(AnagramInternal):
 
         # Similar sentences
         if " " in text:
-            self.print("[!] Similar sentences:", self.similar_sentences(text))
+            self.print("[!] Similar sentences:")
+            self.similar_sentences(text)
 
         # Similar words
         else:

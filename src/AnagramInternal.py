@@ -188,7 +188,7 @@ class AnagramInternal:
 
     # Print json database
     def dump(self):
-        return json.dumps(self.database, self.args["params"]["log"])
+        return json.dumps(self.database, indent=self.args["params"]["log"])
 
     # Scan inputs to database
     def load_generator(self):
